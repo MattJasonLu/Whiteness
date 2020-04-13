@@ -551,7 +551,21 @@ PlayerSettings:
   webGLUseEmbeddedResources: 0
   webGLUseWasm: 0
   webGLCompressionFormat: 1
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: USE_TIMELINE
+    4: USE_TIMELINE
+    7: USE_TIMELINE
+    13: USE_TIMELINE
+    14: USE_TIMELINE
+    17: USE_TIMELINE
+    18: USE_TIMELINE
+    19: USE_TIMELINE
+    20: USE_TIMELINE
+    21: USE_TIMELINE
+    23: USE_TIMELINE
+    24: USE_TIMELINE
+    25: USE_TIMELINE
+    27: USE_TIMELINE
   platformArchitecture: {}
   scriptingBackend: {}
   incrementalIl2cppBuild: {}

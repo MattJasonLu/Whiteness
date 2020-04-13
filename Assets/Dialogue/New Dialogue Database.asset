@@ -47,10 +47,10 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 3
+  - id: 2
     fields:
     - title: Name
-      value: "\u961F\u53CB"
+      value: "\u8001\u677F"
       type: 0
       typeString: 
     - title: IsPlayer
@@ -61,10 +61,10 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 2
+  - id: 3
     fields:
     - title: Name
-      value: "\u8001\u677F"
+      value: "\u961F\u53CB"
       type: 0
       typeString: 
     - title: IsPlayer
@@ -98,7 +98,7 @@ MonoBehaviour:
     - title: Title
       value: FirstConverstaion
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Actor
       value: 1
       type: 5
@@ -176,8 +176,8 @@ MonoBehaviour:
           Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
-        x: 46
-        y: 39
+        x: 46.769226
+        y: 38.23076
         width: 160
         height: 30
     - id: 1
@@ -191,7 +191,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -229,8 +229,8 @@ MonoBehaviour:
           Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
-        x: 45.76924
-        y: 90
+        x: 44.899673
+        y: 90.86958
         width: 160
         height: 30
     - id: 2
@@ -282,8 +282,8 @@ MonoBehaviour:
           Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
-        x: 49
-        y: 139
+        x: 45.52173
+        y: 138.13042
         width: 160
         height: 30
     - id: 3
@@ -336,7 +336,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 44.230774
-        y: 190.23077
+        y: 192.83945
         width: 160
         height: 30
     - id: 4
@@ -387,7 +387,7 @@ MonoBehaviour:
         width: 160
         height: 30
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1.2999997
+    canvasZoom: 1.1499999
   - id: 2
     fields:
     - title: Title
