@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour {
 
-	public float speed = 5f;
+	Vector3 offset;
+	GameObject player;
+
+	void Awake()
+	{
+		player = GameObject.FindGameObjectWithTag("Player");
+	}
 
 	// Use this for initialization
-	void Start () {
-		
+	void Start() { 
+		offset = transform.position - player.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		float h = Input.GetAxisRaw("Horizontal");
-		float v = Input.GetAxisRaw("Vertical");
-
-		Vector3 targetCamPos = transform.position + new Vector3(-h, 0, 0) + new Vector3(0, 0, -v);
-		transform.position = Vector3.Lerp(transform.position, targetCamPos, speed * Time.deltaTime);
+		transform.position = player.transform.position + offset;
 	}
 }
