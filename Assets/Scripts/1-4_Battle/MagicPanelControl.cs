@@ -15,6 +15,7 @@ public class MagicPanelControl : MonoBehaviour {
 	{
 
 	}
+
 	public void Magic_3()
 	{
 
