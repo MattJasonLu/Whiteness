@@ -16,8 +16,10 @@ public class BattleSystem : MonoBehaviour {
 	private List<GameObject> remainEnemyUnits;
 	// 当前行动单元
 	private GameObject currentActUnit;
+	private RoleUnit currentActUnitStatus;
 	// 当前行动单元目标
 	private GameObject currentActTargetUnit;
+	private RoleUnit currentActTargetUnitStatus;
 
 	void Start()
 	{
@@ -36,13 +38,35 @@ public class BattleSystem : MonoBehaviour {
 		enemyUnits.ForEach(p => battleUnits.Add(p));
 	}
 
+	// 速度降序排列
 	void SortBySpeed()
 	{
-
+		battleUnits.Sort((x, y) => x.GetComponent<RoleUnit>().SPD.CompareTo(y.GetComponent<RoleUnit>().SPD));
 	}
 
 	void ToBattle()
 	{
+		remainPlayerUnits = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
+		remainEnemyUnits = new List<GameObject>(GameObject.FindGameObjectsWithTag("Enemy"));
+		if (remainPlayerUnits.Count == 0)
+		{
+			// 失败
+		}
+		else if (remainEnemyUnits.Count == 0)
+		{
+			// 成功
+		}
+		else
+		{
+			// 战斗队列第一位出栈
+			currentActUnit = battleUnits[0];
+			currentActUnitStatus = currentActUnit.GetComponent<RoleUnit>();
+			battleUnits.RemoveAt(0);
+			battleUnits.Add(currentActUnit);
+			if (!currentActUnitStatus.dead)
+			{
 
+			}
+		}
 	}
 }
