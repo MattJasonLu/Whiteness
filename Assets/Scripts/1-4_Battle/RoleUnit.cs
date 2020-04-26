@@ -23,11 +23,22 @@ public class RoleUnit : MonoBehaviour {
 	public int DEX = 10;
 	// 敏捷，增加速度
 	public int AGL = 10;
-	// 攻击范围，0为单个对象，1为多个
+	// 攻击范围，0为近战，1为远程
 	public int RNG = 0;
 
 	public bool dead = false;
 	
-	
+	// 攻击
+	public void Attack()
+	{
+
+	}
+
+
+	// 受伤
+	public void ReceiveDamage()
+	{
+
+	}
 
 }

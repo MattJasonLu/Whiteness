@@ -2333,6 +2333,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec55eed7155577f4e98f5c16fa2f483f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyZone: 0
+  unitMoveSpeed: 5
   currentActPlayerUnitPos: {fileID: 1390769041}
   playerUnitPos_1: {fileID: 1392881318}
   playerUnitPos_2: {fileID: 1740318600}
@@ -2341,6 +2343,7 @@ MonoBehaviour:
   enemyUnitPos_1: {fileID: 921722715}
   enemyUnitPos_2: {fileID: 301847829}
   enemyUnitPos_3: {fileID: 288826119}
+  basicPanel: {fileID: 109489497}
 --- !u!4 &745000910
 Transform:
   m_ObjectHideFlags: 0

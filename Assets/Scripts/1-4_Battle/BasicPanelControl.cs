@@ -23,7 +23,7 @@ public class BasicPanelControl : MonoBehaviour {
 	// 普通攻击
 	public void CommonAttack()
 	{
-
+		BattleSystem._instance.OnAttack();
 	}
 
 	// 显示魔法面板

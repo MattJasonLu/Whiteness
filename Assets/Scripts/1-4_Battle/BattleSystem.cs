@@ -7,6 +7,28 @@ using Random = UnityEngine.Random;
 
 public class BattleSystem : MonoBehaviour {
 
+	public static BattleSystem _instance;
+
+	private BattleSystem()
+	{
+		_instance = this;
+	}
+
+	// 敌人区域
+	public int enemyZone = 0;
+	public int unitMoveSpeed = 5;
+	// 位置
+	public Transform currentActPlayerUnitPos;
+	public Transform playerUnitPos_1;
+	public Transform playerUnitPos_2;
+	public Transform playerUnitPos_3;
+	public Transform currentActEnemyUnitPos;
+	public Transform enemyUnitPos_1;
+	public Transform enemyUnitPos_2;
+	public Transform enemyUnitPos_3;
+	// 选项面板
+	public GameObject basicPanel;
+
 	// 所有参战单元
 	private List<GameObject> battleUnits;
 	// 所有玩家单元
@@ -23,24 +45,110 @@ public class BattleSystem : MonoBehaviour {
 	// 当前行动单元目标
 	private GameObject currentActTargetUnit;
 	private RoleUnit currentActTargetUnitStatus;
-	// 敌人区域
-	public int enemyZone = 0;
-	// 位置
-	public Transform currentActPlayerUnitPos;
-	public Transform playerUnitPos_1;
-	public Transform playerUnitPos_2;
-	public Transform playerUnitPos_3;
-	public Transform currentActEnemyUnitPos;
-	public Transform enemyUnitPos_1;
-	public Transform enemyUnitPos_2;
-	public Transform enemyUnitPos_3;
+	// 是否等待玩家选择技能
+	private bool isWaitForPlayerToChooseSkill;
+	// 是否等待玩家选择目标
+	private bool isWaitForPlayerToChooseTarget;
+	// 是否单元跑向目标
+	private bool isUnitRunningToTarget;
+	// 是否单元跑回原地
+	private bool isUnitRunningBack;
+	// 鼠标射线
+	private Ray targetChooseRay;
+	// 射线碰撞物体
+	private RaycastHit targetHit;
+	private Vector3 currentActUnitInitialPosition;
+	private Vector3 currentActUnitTargetPosition;
+	private Vector3 currentactUnitStopPosition;
 
+	void Awake()
+	{
+		basicPanel.SetActive(false);
+	}
 
 	void Start()
 	{
 		Init();
 		SortBySpeed();
 		ToBattle();
+	}
+
+	void Update()
+	{
+		if (isWaitForPlayerToChooseSkill)
+		{
+			basicPanel.SetActive(true);
+		}
+
+		if (isWaitForPlayerToChooseTarget)
+		{
+			basicPanel.SetActive(false);
+			targetChooseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (Physics.Raycast(targetChooseRay, out targetHit))
+			{
+				if (Input.GetMouseButtonDown(0) && targetHit.collider.gameObject.tag == "Enemy")
+				{
+					currentActTargetUnit = targetHit.collider.gameObject;
+					isWaitForPlayerToChooseTarget = false;
+					Debug.Log(currentActTargetUnit.name);
+					//如果是远程单位直接在这里LaunchAttack，就不需要RunToTarget
+					if (currentActUnit.GetComponent<RoleUnit>().RNG == 1)
+					{
+						LaunchAttack();
+					}
+					else
+					{
+						RunToTarget();
+					}
+				}
+			}
+		}
+
+		if (isUnitRunningToTarget)
+		{
+			float distanceToTarget = Vector3.Distance(currentActUnitTargetPosition, currentActUnit.transform.position);           //到目标的距离，需要实时计算
+            //避免靠近目标时抖动
+			if (distanceToTarget > 1)
+			{
+				currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", -1);
+				//Time.deltaTime保证速度单位是每秒
+				currentActUnit.transform.localPosition = Vector3.MoveTowards(currentActUnit.transform.localPosition, currentActUnitTargetPosition, unitMoveSpeed * Time.deltaTime);
+			}
+			else
+			{
+				//停止移动
+				currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 0);
+				//关闭移动状态
+				isUnitRunningToTarget = false;
+				//记录停下的位置
+				currentactUnitStopPosition = currentActUnit.transform.position;
+				//开始攻击
+				LaunchAttack();
+			}
+
+		}
+
+		if (isUnitRunningBack)
+		{
+			//离初始位置的距离
+			float distanceToInitial = Vector3.Distance(currentActUnit.transform.position, currentActUnitInitialPosition);           
+			if (distanceToInitial > 1)
+			{
+				currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 1);
+				currentActUnit.transform.localPosition = Vector3.MoveTowards(currentActUnit.transform.localPosition, currentActUnitInitialPosition, unitMoveSpeed * Time.deltaTime);
+			}
+			else
+			{
+				//停止移动
+				currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 0);
+				//关闭移动状态
+				isUnitRunningBack = false;
+				//修正到初始位置和朝向
+				currentActUnit.transform.position = currentActUnitInitialPosition;
+				//攻击单位回原位后行动结束，到下一个单位
+				ToBattle();
+			}
+		}
 	}
 
 	void Init()
@@ -79,6 +187,7 @@ public class BattleSystem : MonoBehaviour {
 				pos = playerUnitPos_3.position;
 			}
 			GameObject role = Instantiate(prefab, pos, Quaternion.identity);
+			role.GetComponent<RoleUnit>().SPD = 200;
 			role.tag = "Player";
 		}
 	}
@@ -91,7 +200,6 @@ public class BattleSystem : MonoBehaviour {
 
 		// 获取所有prefab
 		List<string> prefabNameList = GetPrefabNameListFromPath(prefix + path);
-		prefabNameList.ForEach(p => Debug.Log(p));
 
 		int enemyCount = Random.Range(1, 4);
 		for (int i = 0; i < enemyCount; i++)
@@ -130,11 +238,10 @@ public class BattleSystem : MonoBehaviour {
 		return prefabList;
 	}
 
-
 	// 速度降序排列
 	void SortBySpeed()
 	{
-		battleUnits.Sort((x, y) => x.GetComponent<RoleUnit>().SPD.CompareTo(y.GetComponent<RoleUnit>().SPD));
+		battleUnits.Sort((x, y) => y.GetComponent<RoleUnit>().SPD.CompareTo(x.GetComponent<RoleUnit>().SPD));
 	}
 
 	void ToBattle()
@@ -144,10 +251,12 @@ public class BattleSystem : MonoBehaviour {
 		if (remainPlayerUnits.Count == 0)
 		{
 			// 失败
+			Debug.Log("我方全灭，战斗失败");
 		}
 		else if (remainEnemyUnits.Count == 0)
 		{
 			// 成功
+			Debug.Log("敌人全灭，战斗胜利");
 		}
 		else
 		{
@@ -158,8 +267,65 @@ public class BattleSystem : MonoBehaviour {
 			battleUnits.Add(currentActUnit);
 			if (!currentActUnitStatus.dead)
 			{
-
+				if (currentActUnit.tag == "Player")
+				{
+					currentActUnit.transform.position = currentActPlayerUnitPos.position;
+				}
+				else if (currentActUnit.tag == "Enemy")
+				{
+					currentActUnit.transform.position = currentActEnemyUnitPos.position;
+				}
+				FindTarget();
+			}
+			else
+			{
+				ToBattle();
 			}
 		}
+	}
+
+	void FindTarget()
+	{
+		if (currentActUnit.tag == "Enemy")
+		{
+			//如果行动单位是怪物则从存活玩家对象中随机一个目标
+			int targetIndex = Random.Range(0, remainPlayerUnits.Count);
+			currentActTargetUnit = remainPlayerUnits[targetIndex];
+
+			//如果是远程单位直接在这里LaunchAttack，就不需要RunToTarget
+			if (currentActUnit.GetComponent<RoleUnit>().RNG == 1)
+			{
+				LaunchAttack();
+			}
+			else
+			{
+				RunToTarget();
+			}
+		}
+		else if (currentActUnit.tag == "Player")
+		{
+			isWaitForPlayerToChooseSkill = true;
+		}
+	}
+
+	void RunToTarget()
+	{
+		currentActUnitInitialPosition = currentActUnit.transform.position;         //保存移动前的位置和朝向，因为跑回来还要用
+		currentActUnitTargetPosition = currentActTargetUnit.transform.position;         //目标的位置
+																						//开启移动状态
+		isUnitRunningToTarget = true;
+        //移动的控制放到Update里，因为要每一帧判断离目标的距离
+	}
+
+	void LaunchAttack()
+	{
+		isUnitRunningBack = true;
+	}
+
+	// 按钮事件触发
+	public void OnAttack()
+	{
+		isWaitForPlayerToChooseSkill = false;
+		isWaitForPlayerToChooseTarget = true;
 	}
 }
