@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BasicPanelControl : MonoBehaviour {
 
@@ -56,7 +57,7 @@ public class BasicPanelControl : MonoBehaviour {
 	// 撤退
 	public void Retreat()
 	{
-
+		SceneManager.LoadScene(1);
 	}
 
 

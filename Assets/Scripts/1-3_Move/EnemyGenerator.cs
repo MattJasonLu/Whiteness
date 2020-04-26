@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyGenerator : MonoBehaviour {
 
 	public int minStep = 40;
 	public int maxStep = 50;
-	public int step;
-	public int count = 0;
+	int step;
+	int count = 0;
 	Vector3 oldPos;
 	Vector3 newPos;
-	public float offset;
+	float offset;
 	GameObject player;
 
 	void Awake()
@@ -34,6 +35,9 @@ public class EnemyGenerator : MonoBehaviour {
 			if (count >= step)
 			{
 				Debug.Log("遭遇敌人！");
+				string playerListStr = "U001,U001,U001";
+				PlayerPrefs.SetString("PlayerList", playerListStr);
+				SceneManager.LoadScene(2);
 				count = 0;
 				step = Random.Range(minStep, maxStep);
 			}
