@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class BattleSystem : MonoBehaviour {
@@ -28,6 +29,11 @@ public class BattleSystem : MonoBehaviour {
 	public Transform enemyUnitPos_3;
 	// 选项面板
 	public GameObject basicPanel;
+	// 伤害信息
+	public GameObject hint;
+
+	public Canvas canvas;
+	public Camera UICamera;
 
 	// 所有参战单元
 	private List<GameObject> battleUnits;
@@ -90,7 +96,7 @@ public class BattleSystem : MonoBehaviour {
 				{
 					currentActTargetUnit = targetHit.collider.gameObject;
 					isWaitForPlayerToChooseTarget = false;
-					Debug.Log(currentActTargetUnit.name);
+					currentActTargetUnitStatus = currentActTargetUnit.GetComponent<RoleUnit>();
 					//如果是远程单位直接在这里LaunchAttack，就不需要RunToTarget
 					if (currentActUnit.GetComponent<RoleUnit>().RNG == 1)
 					{
@@ -110,7 +116,14 @@ public class BattleSystem : MonoBehaviour {
             //避免靠近目标时抖动
 			if (distanceToTarget > 1)
 			{
-				currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", -1);
+				if (currentActUnit.tag == "Player")
+				{
+					currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", -1);
+				}
+				else if (currentActUnit.tag == "Enemy")
+				{
+					currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 1);
+				}
 				//Time.deltaTime保证速度单位是每秒
 				currentActUnit.transform.localPosition = Vector3.MoveTowards(currentActUnit.transform.localPosition, currentActUnitTargetPosition, unitMoveSpeed * Time.deltaTime);
 			}
@@ -132,15 +145,23 @@ public class BattleSystem : MonoBehaviour {
 		{
 			//离初始位置的距离
 			float distanceToInitial = Vector3.Distance(currentActUnit.transform.position, currentActUnitInitialPosition);           
-			if (distanceToInitial > 1)
+			if (distanceToInitial > 0.3)
 			{
-				currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 1);
+				if (currentActUnit.tag == "Player")
+				{
+					currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 1);
+				}
+				else if (currentActUnit.tag == "Enemy")
+				{
+					currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", -1);
+				}
 				currentActUnit.transform.localPosition = Vector3.MoveTowards(currentActUnit.transform.localPosition, currentActUnitInitialPosition, unitMoveSpeed * Time.deltaTime);
 			}
 			else
 			{
 				//停止移动
 				currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 0);
+				currentActUnit.GetComponentInChildren<Animator>().SetTrigger("Idle");
 				//关闭移动状态
 				isUnitRunningBack = false;
 				//修正到初始位置和朝向
@@ -267,14 +288,14 @@ public class BattleSystem : MonoBehaviour {
 			battleUnits.Add(currentActUnit);
 			if (!currentActUnitStatus.dead)
 			{
-				if (currentActUnit.tag == "Player")
-				{
-					currentActUnit.transform.position = currentActPlayerUnitPos.position;
-				}
-				else if (currentActUnit.tag == "Enemy")
-				{
-					currentActUnit.transform.position = currentActEnemyUnitPos.position;
-				}
+				//if (currentActUnit.tag == "Player")
+				//{
+				//	currentActUnit.transform.position = currentActPlayerUnitPos.position;
+				//}
+				//else if (currentActUnit.tag == "Enemy")
+				//{
+				//	currentActUnit.transform.position = currentActEnemyUnitPos.position;
+				//}
 				FindTarget();
 			}
 			else
@@ -314,12 +335,33 @@ public class BattleSystem : MonoBehaviour {
 		currentActUnitTargetPosition = currentActTargetUnit.transform.position;         //目标的位置
 																						//开启移动状态
 		isUnitRunningToTarget = true;
-        //移动的控制放到Update里，因为要每一帧判断离目标的距离
+        // 移动的控制放到Update里，因为要每一帧判断离目标的距离
 	}
 
+	/// <summary>
+	/// 发动攻击
+	/// </summary>
 	void LaunchAttack()
 	{
+		StartCoroutine("WaitForAttack");
+	}
+
+	/// <summary>
+	/// 播放攻击动画，延时
+	/// </summary>
+	/// <returns></returns>
+	IEnumerator WaitForAttack()
+	{
+		// 获取行动角色的攻击值
+		int attackVal = currentActUnitStatus.GetAttackValue();
+		ShowHint(currentActUnit, "发动攻击");
+		yield return new WaitForSeconds(1);
+		int receiveVal = currentActTargetUnitStatus.GetDamageValue(attackVal);
+		ShowHint(currentActTargetUnit, receiveVal.ToString());
+		yield return new WaitForSeconds(0.5f);
+		// 使角色返回
 		isUnitRunningBack = true;
+
 	}
 
 	// 按钮事件触发
@@ -327,5 +369,23 @@ public class BattleSystem : MonoBehaviour {
 	{
 		isWaitForPlayerToChooseSkill = false;
 		isWaitForPlayerToChooseTarget = true;
+	}
+
+	/// <summary>
+	/// 显示伤害信息
+	/// </summary>
+	/// <param name="str"></param>
+	void ShowHint(GameObject target, string str)
+	{
+		// 世界坐标转屏幕坐标
+		Vector3 unitPos = Camera.main.WorldToScreenPoint(target.transform.position);
+		Vector3 guiPos;
+		RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas.GetComponent<RectTransform>(), unitPos, UICamera, out guiPos);
+		GameObject hintGO = Instantiate(hint);
+		hintGO.GetComponent<Text>().text = "-" + str;
+		hintGO.transform.SetParent(canvas.transform, false);
+		hintGO.transform.position = guiPos + new Vector3(0, 0.7f, 0);
+		// 销毁
+		Destroy(hintGO, 0.5f);
 	}
 }

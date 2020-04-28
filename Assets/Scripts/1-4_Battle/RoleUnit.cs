@@ -28,17 +28,25 @@ public class RoleUnit : MonoBehaviour {
 
 	public bool dead = false;
 	
-	// 攻击
-	public void Attack()
+	/// <summary>
+	/// 获取攻击值
+	/// </summary>
+	/// <returns></returns>
+	public int GetAttackValue()
 	{
-
+		// TODO：需计算
+		return 10;
 	}
 
-
-	// 受伤
-	public void ReceiveDamage()
+	/// <summary>
+	/// 使角色受到伤害
+	/// </summary>
+	/// <param name="damage"></param>
+	/// <returns>实际受到的伤害</returns>
+	public int GetDamageValue(int damage)
 	{
-
+		// TODO：需计算
+		return 10;
 	}
 
 }
