@@ -16,7 +16,7 @@ public class BattleSystem : MonoBehaviour {
 	}
 
 	// 敌人区域
-	public int enemyZone = 0;
+	//public int enemyZone = 0;
 	public int unitMoveSpeed = 5;
 	// 位置
 	public Transform currentActPlayerUnitPos;
@@ -31,9 +31,11 @@ public class BattleSystem : MonoBehaviour {
 	public GameObject basicPanel;
 	// 伤害信息
 	public GameObject hint;
-
+	// UI部分
 	public Canvas canvas;
 	public Camera UICamera;
+	// 敌人种子
+	public GameObject[] enemyPrefabs;
 
 	// 所有参战单元
 	private List<GameObject> battleUnits;
@@ -216,17 +218,18 @@ public class BattleSystem : MonoBehaviour {
 	// 生成敌人列表
 	void GenerateEnemyList()
 	{
-		string prefix = "Assets/Resources/";
-		string path = "Role/Enemy/" + enemyZone + "/";
+		//string prefix = "Assets/Resources/";
+		//string path = "Role/Enemy/" + enemyZone + "/";
 
 		// 获取所有prefab
-		List<string> prefabNameList = GetPrefabNameListFromPath(prefix + path);
+		//List<string> prefabNameList = GetPrefabNameListFromPath(prefix + path);
 
 		int enemyCount = Random.Range(1, 4);
 		for (int i = 0; i < enemyCount; i++)
 		{
 			// 加载每一个对象
-			GameObject prefab = Resources.Load(path + prefabNameList[Random.Range(0, prefabNameList.Count - 1)]) as GameObject;
+			//GameObject prefab = Resources.Load(path + prefabNameList[Random.Range(0, prefabNameList.Count - 1)]) as GameObject;
+			GameObject prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length - 1)];
 			Vector3 pos = enemyUnitPos_1.position;
 			if (i == 0)
 			{

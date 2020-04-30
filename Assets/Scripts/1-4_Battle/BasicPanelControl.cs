@@ -57,7 +57,7 @@ public class BasicPanelControl : MonoBehaviour {
 	// 撤退
 	public void Retreat()
 	{
-		SceneManager.LoadScene(1);
+		LevelLoader._instance.LoadPreviousLevel();
 	}
 
 

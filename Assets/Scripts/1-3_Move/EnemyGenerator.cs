@@ -35,9 +35,12 @@ public class EnemyGenerator : MonoBehaviour {
 			if (count >= step)
 			{
 				Debug.Log("遭遇敌人！");
+				player.GetComponentInChildren<TestPlayerMove>().enabled = false;
+				player.GetComponentInChildren<Animator>().SetInteger("Vertical", 0);
+				player.GetComponentInChildren<Animator>().SetInteger("Horizontal", 0);
 				string playerListStr = "U001,U001,U001";
 				PlayerPrefs.SetString("PlayerList", playerListStr);
-				SceneManager.LoadScene(2);
+				LevelLoader._instance.LoadNextLevel();
 				count = 0;
 				step = Random.Range(minStep, maxStep);
 			}
@@ -48,5 +51,10 @@ public class EnemyGenerator : MonoBehaviour {
 			i = 0;
 		}
 		i += Time.deltaTime;
+	}
+
+	public void ReloadScene()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 }
