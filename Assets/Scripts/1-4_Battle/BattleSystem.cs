@@ -36,6 +36,8 @@ public class BattleSystem : MonoBehaviour {
 	public Camera UICamera;
 	// 敌人种子
 	public GameObject[] enemyPrefabs;
+	// 提示文字
+	public GameObject notice;
 
 	// 所有参战单元
 	private List<GameObject> battleUnits;
@@ -72,13 +74,13 @@ public class BattleSystem : MonoBehaviour {
 	void Awake()
 	{
 		basicPanel.SetActive(false);
+		notice.SetActive(false);
 	}
 
 	void Start()
 	{
 		Init();
-		SortBySpeed();
-		ToBattle();
+		Invoke("InitAfter", 1f);
 	}
 
 	void Update()
@@ -178,13 +180,34 @@ public class BattleSystem : MonoBehaviour {
 	{
 		GeneratePlayerList();
 		GenerateEnemyList();
-
+		// 显示提示文字
+		StartCoroutine(ShowNotice("战斗开始"));
 		// 单元分配
 		battleUnits = new List<GameObject>();
 		playerUnits = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
 		enemyUnits = new List<GameObject>(GameObject.FindGameObjectsWithTag("Enemy"));
 		playerUnits.ForEach(p => battleUnits.Add(p));
 		enemyUnits.ForEach(p => battleUnits.Add(p));
+	}
+
+	void InitAfter()
+	{
+		SortBySpeed();
+		ToBattle();
+	}
+
+	/// <summary>
+	/// 显示提示文字
+	/// </summary>
+	/// <param name="text"></param>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	IEnumerator ShowNotice(string text, float time = 2f)
+	{
+		notice.SetActive(true);
+		notice.GetComponent<Text>().text = text;
+		yield return new WaitForSeconds(time);
+		notice.SetActive(false);
 	}
 
 	// 生成玩家列表
@@ -275,12 +298,14 @@ public class BattleSystem : MonoBehaviour {
 		if (remainPlayerUnits.Count == 0)
 		{
 			// 失败
-			Debug.Log("我方全灭，战斗失败");
+			StartCoroutine(ShowNotice("我方全灭，战斗失败"));
+			LevelLoader._instance.LoadPreviousLevel();
 		}
 		else if (remainEnemyUnits.Count == 0)
 		{
 			// 成功
-			Debug.Log("敌人全灭，战斗胜利");
+			StartCoroutine(ShowNotice("敌人全灭，战斗胜利"));
+			LevelLoader._instance.LoadPreviousLevel();
 		}
 		else
 		{
@@ -299,7 +324,8 @@ public class BattleSystem : MonoBehaviour {
 				//{
 				//	currentActUnit.transform.position = currentActEnemyUnitPos.position;
 				//}
-				FindTarget();
+				//FindTarget();
+				StartCoroutine(WaitForFindTarget());
 			}
 			else
 			{
@@ -330,6 +356,17 @@ public class BattleSystem : MonoBehaviour {
 		{
 			isWaitForPlayerToChooseSkill = true;
 		}
+	}
+
+	/// <summary>
+	/// 等待时间
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	IEnumerator WaitForFindTarget(float time = 1f)
+	{
+		yield return new WaitForSeconds(time);
+		FindTarget();
 	}
 
 	void RunToTarget()
@@ -390,5 +427,16 @@ public class BattleSystem : MonoBehaviour {
 		hintGO.transform.position = guiPos + new Vector3(0, 0.7f, 0);
 		// 销毁
 		Destroy(hintGO, 0.5f);
+	}
+
+	/// <summary>
+	/// 延迟时间
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	IEnumerator WaitForTime(float time = 1f)
+	{
+		yield return new WaitForSeconds(time);
+		Debug.Log(time);
 	}
 }
