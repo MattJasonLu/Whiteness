@@ -59,6 +59,8 @@ public class BattleSystem : MonoBehaviour {
 	private bool isWaitForPlayerToChooseSkill;
 	// 是否等待玩家选择目标
 	private bool isWaitForPlayerToChooseTarget;
+	// 是否出战
+	private bool isUnitRunningToBattle;
 	// 是否单元跑向目标
 	private bool isUnitRunningToTarget;
 	// 是否单元跑回原地
@@ -111,6 +113,49 @@ public class BattleSystem : MonoBehaviour {
 						RunToTarget();
 					}
 				}
+			}
+		}
+
+		// 跑向出战位置
+		if (isUnitRunningToBattle)
+		{
+			float disToBattle = 999;
+			//到目标的距离，需要实时计算
+			if (currentActUnit.tag == "Player") { 
+				disToBattle = Vector3.Distance(currentActPlayerUnitPos.position, currentActUnit.transform.position);           
+			}
+			else if (currentActUnit.tag == "Enemy")
+			{
+				disToBattle = Vector3.Distance(currentActEnemyUnitPos.position, currentActUnit.transform.position);
+			}
+
+			//避免靠近目标时抖动
+			if (disToBattle > 0)
+			{
+				if (currentActUnit.tag == "Player")
+				{
+					currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", -1);
+				}
+				else if (currentActUnit.tag == "Enemy")
+				{
+					currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 1);
+				}
+				// Time.deltaTime保证速度单位是每秒
+				if (currentActUnit.tag == "Player")
+				{
+					currentActUnit.transform.localPosition = Vector3.MoveTowards(currentActUnit.transform.localPosition, currentActPlayerUnitPos.position, unitMoveSpeed * Time.deltaTime);
+				}
+				else if (currentActUnit.tag == "Enemy")
+				{
+					currentActUnit.transform.localPosition = Vector3.MoveTowards(currentActUnit.transform.localPosition, currentActEnemyUnitPos.position, unitMoveSpeed * Time.deltaTime);
+				}
+			}
+			else
+			{
+				//停止移动
+				currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 0);
+				//关闭移动状态
+				isUnitRunningToBattle = false;
 			}
 		}
 
@@ -314,17 +359,10 @@ public class BattleSystem : MonoBehaviour {
 			currentActUnitStatus = currentActUnit.GetComponent<RoleUnit>();
 			battleUnits.RemoveAt(0);
 			battleUnits.Add(currentActUnit);
+			
 			if (!currentActUnitStatus.dead)
 			{
-				//if (currentActUnit.tag == "Player")
-				//{
-				//	currentActUnit.transform.position = currentActPlayerUnitPos.position;
-				//}
-				//else if (currentActUnit.tag == "Enemy")
-				//{
-				//	currentActUnit.transform.position = currentActEnemyUnitPos.position;
-				//}
-				//FindTarget();
+				RunToBattlePos();
 				StartCoroutine(WaitForFindTarget());
 			}
 			else
@@ -332,6 +370,25 @@ public class BattleSystem : MonoBehaviour {
 				ToBattle();
 			}
 		}
+	}
+
+	void RunToBattlePos()
+	{
+		// 保存移动前的位置和朝向，因为跑回来还要用
+		currentActUnitInitialPosition = currentActUnit.transform.position;
+		// 跑向战斗位置
+		isUnitRunningToBattle = true;
+	}
+
+	/// <summary>
+	/// 等待时间
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	IEnumerator WaitForFindTarget(float time = 1f)
+	{
+		yield return new WaitForSeconds(time);
+		FindTarget();
 	}
 
 	void FindTarget()
@@ -358,24 +415,14 @@ public class BattleSystem : MonoBehaviour {
 		}
 	}
 
-	/// <summary>
-	/// 等待时间
-	/// </summary>
-	/// <param name="time"></param>
-	/// <returns></returns>
-	IEnumerator WaitForFindTarget(float time = 1f)
-	{
-		yield return new WaitForSeconds(time);
-		FindTarget();
-	}
-
 	void RunToTarget()
 	{
-		currentActUnitInitialPosition = currentActUnit.transform.position;         //保存移动前的位置和朝向，因为跑回来还要用
-		currentActUnitTargetPosition = currentActTargetUnit.transform.position;         //目标的位置
-																						//开启移动状态
+		
+		// 目标的位置
+		currentActUnitTargetPosition = currentActTargetUnit.transform.position;
+		// 开启移动状态，移动的控制放到Update里，因为要每一帧判断离目标的距离
 		isUnitRunningToTarget = true;
-        // 移动的控制放到Update里，因为要每一帧判断离目标的距离
+        
 	}
 
 	/// <summary>
@@ -383,7 +430,7 @@ public class BattleSystem : MonoBehaviour {
 	/// </summary>
 	void LaunchAttack()
 	{
-		StartCoroutine("WaitForAttack");
+		StartCoroutine(WaitForAttack());
 	}
 
 	/// <summary>
