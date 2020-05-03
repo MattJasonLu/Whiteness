@@ -705,7 +705,6 @@ GameObject:
   - component: {fileID: 1453822403}
   - component: {fileID: 1453822404}
   - component: {fileID: 1453822405}
-  - component: {fileID: 1453822406}
   m_Layer: 0
   m_Name: EnemyGenerator
   m_TagString: Untagged
@@ -745,20 +744,9 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1453822402}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5833588e0e1a52b4fbd1bcba1ca9ef2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1453822406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1453822402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1532cd955a409e4c9ebbb3e02855b88, type: 3}
+  m_Script: {fileID: 11500000, guid: 5833588e0e1a52b4fbd1bcba1ca9ef2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1620103235
