@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestPlayerMove : MonoBehaviour {
+public class PlayerSimpleMove : MonoBehaviour {
 
 	public float speed = 5f;
 	// 映射的3D物体

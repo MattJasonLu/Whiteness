@@ -35,7 +35,7 @@ public class EnemyGenerator : MonoBehaviour {
 			if (count >= step)
 			{
 				Debug.Log("遭遇敌人！");
-				player.GetComponentInChildren<TestPlayerMove>().enabled = false;
+				player.GetComponentInChildren<PlayerSimpleMove>().enabled = false;
 				player.GetComponentInChildren<Animator>().SetInteger("Vertical", 0);
 				player.GetComponentInChildren<Animator>().SetInteger("Horizontal", 0);
 				string playerListStr = "U001,U001,U001";
