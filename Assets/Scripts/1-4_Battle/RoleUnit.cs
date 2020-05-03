@@ -5,6 +5,8 @@ using UnityEngine;
 public class RoleUnit : MonoBehaviour {
 	// 单位编号
 	public string unitId = "U001";
+	// 名字
+	public string unitName = "";
 	// 等级
 	public int level = 1;
 	// 血量
@@ -35,11 +37,35 @@ public class RoleUnit : MonoBehaviour {
 	public int RNG = 0;
 	// 暴击
 	public int CRT = 10;
+	// 角色类型，0为玩家，1为敌人
+	public int roleType = 0;
 	// 当前经验值
 	public int EXP = 100;
 	// 是否死亡
 	public bool dead = false;
 	
+	public void SetInitData(RoleUnit roleUnit)
+	{
+		unitName = roleUnit.unitName;
+		level = roleUnit.level;
+		initHP = roleUnit.initHP; 
+		HP = roleUnit.initHP;
+		initEP = roleUnit.initEP;
+		EP = roleUnit.initEP;
+		initCP = roleUnit.initCP;
+		CP = roleUnit.initCP;
+		STR = roleUnit.STR;
+		DEF = roleUnit.DEF;
+		ATS = roleUnit.ATS;
+		ADF = roleUnit.ADF;
+		SPD = roleUnit.SPD;
+		DEX = roleUnit.DEX;
+		RNG = roleUnit.RNG;
+		CRT = roleUnit.CRT;
+		EXP = roleUnit.EXP;
+	}
+
+
 	/// <summary>
 	/// 获取攻击值
 	/// </summary>

@@ -18,6 +18,8 @@ public class BattleSystem : MonoBehaviour {
 	// 敌人区域
 	//public int enemyZone = 0;
 	public int unitMoveSpeed = 5;
+	public int minEnemyLevel = 1;
+	public int maxEnemyLevel = 3;
 	// 位置
 	public Transform currentActPlayerUnitPos;
 	public Transform playerUnitPos_1;
@@ -278,8 +280,10 @@ public class BattleSystem : MonoBehaviour {
 				pos = playerUnitPos_3.position;
 			}
 			GameObject role = Instantiate(prefab, pos, Quaternion.identity);
-			role.GetComponent<RoleUnit>().SPD = 200;
 			role.tag = "Player";
+			int level = 5; // 需设置为保存值 TODO
+			RoleUnit roleData = RoleUnitCalculator._instance.GetRoleUnitByIdAndLevel(role.GetComponent<RoleUnit>().unitId, level);
+			role.GetComponent<RoleUnit>().SetInitData(roleData);
 		}
 	}
 
@@ -313,6 +317,9 @@ public class BattleSystem : MonoBehaviour {
 			}
 			GameObject role = Instantiate(prefab, pos, Quaternion.identity);
 			role.tag = "Enemy";
+			int level = Random.Range(minEnemyLevel, maxEnemyLevel + 1);
+			RoleUnit roleData = RoleUnitCalculator._instance.GetRoleUnitByIdAndLevel(role.GetComponent<RoleUnit>().unitId, level);
+			role.GetComponent<RoleUnit>().SetInitData(roleData);
 		}
 	}
 

@@ -3,19 +3,28 @@ using System.Collections;
 using System.IO;
 using Mono.Data.Sqlite;
 using System;
+using System.Collections.Generic;
 
 public class SQLiteUtil : MonoBehaviour
 {
+    public static SQLiteUtil _instance;
+
     /// <summary>
     /// SQLite数据库辅助类
     /// </summary>
     private SQLiteHelper sql;
+
+    void Awake()
+    {
+        _instance = this;
+    }
 
     void Start()
     {
         //创建名为sqlite4unity的数据库
         sql = new SQLiteHelper("data source=" + Application.dataPath + "/sqlite4unity.db");
 
+        #region 表操作
         /*
         //创建名为table1的数据表
         sql.CreateTable("LEVELEXP_PLAYER", new string[] { "ID", "LEVEL", "EXP" }, new string[] { "INTEGER", "INTEGER", "INTEGER" });
@@ -27,7 +36,7 @@ public class SQLiteUtil : MonoBehaviour
             sql.InsertValues("LEVELEXP_PLAYER", new string[] { i + "", i + "", y + "" });
         }
         */
-        
+
         //sql.InsertValues("table2", new string[] { "'2'", "'李四'", "'25'", "'Li4@163.com'" });
 
         /*//更新数据，将Name="张三"的记录中的Name改为"Zhang3"
@@ -67,7 +76,71 @@ public class SQLiteUtil : MonoBehaviour
 
         //自定义SQL,删除数据表中所有Name="王五"的记录
         sql.ExecuteQuery("DELETE FROM table1 WHERE NAME='王五'");*/
+        #endregion
 
+        //关闭数据库连接
+        //sql.CloseConnection();
+    }
+
+    public Dictionary<int, int> GetPlayerLevelExpDict()
+    {
+        Dictionary<int, int> levelDict = new Dictionary<int, int>();
+        SqliteDataReader reader = sql.ReadFullTable("LEVELEXP_PLAYER");
+        while (reader.Read())
+        {
+            int level = reader.GetInt32(reader.GetOrdinal("LEVEL"));
+            int exp = reader.GetInt32(reader.GetOrdinal("EXP"));
+            levelDict.Add(level, exp);
+        }
+        return levelDict;
+    }
+
+    public Dictionary<int, int> GetEnemyLevelExpDict()
+    {
+        Dictionary<int, int> levelDict = new Dictionary<int, int>();
+        SqliteDataReader reader = sql.ReadFullTable("LEVELEXP_ENEMY");
+        while (reader.Read())
+        {
+            int level = reader.GetInt32(reader.GetOrdinal("LEVEL"));
+            int exp = reader.GetInt32(reader.GetOrdinal("EXP"));
+            levelDict.Add(level, exp);
+        }
+        return levelDict;
+    }
+
+    /// <summary>
+    /// 通过角色ID获取角色基本能力值
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public RoleUnit GetRoleUnitById(string id)
+    {
+        RoleUnit roleUnit = new RoleUnit();
+        SqliteDataReader reader = sql.ReadTable("ROLEDEF", new string[] { "NAME", "HP", "EP", "CP", "STR", 
+            "DEF", "ATS", "ADF", "SPD", "DEX", "RNG", "CRT", "ROLETYPE" }, new string[] { "ID" }, 
+            new string[] { "=" }, new string[] { "'" + id + "'" });
+        while (reader.Read())
+        {
+            roleUnit.unitName = reader.GetString(reader.GetOrdinal("NAME"));
+            roleUnit.initHP = reader.GetInt32(reader.GetOrdinal("HP"));
+            roleUnit.initEP = reader.GetInt32(reader.GetOrdinal("EP"));
+            roleUnit.initCP = reader.GetInt32(reader.GetOrdinal("CP"));
+            roleUnit.STR = reader.GetInt32(reader.GetOrdinal("STR"));
+            roleUnit.DEF = reader.GetInt32(reader.GetOrdinal("DEF"));
+            roleUnit.ATS = reader.GetInt32(reader.GetOrdinal("ATS"));
+            roleUnit.ADF = reader.GetInt32(reader.GetOrdinal("ADF"));
+            roleUnit.SPD = reader.GetInt32(reader.GetOrdinal("SPD"));
+            roleUnit.DEX = reader.GetInt32(reader.GetOrdinal("DEX"));
+            roleUnit.RNG = reader.GetInt32(reader.GetOrdinal("RNG"));
+            roleUnit.CRT = reader.GetInt32(reader.GetOrdinal("CRT"));
+            roleUnit.roleType = reader.GetInt32(reader.GetOrdinal("ROLETYPE"));
+            break;
+        }
+        return roleUnit;
+    }
+
+    public void Close()
+    {
         //关闭数据库连接
         sql.CloseConnection();
     }

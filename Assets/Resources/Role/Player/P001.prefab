@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 54744330545132944}
   - component: {fileID: 114044742518017814}
   m_Layer: 0
-  m_Name: U001
+  m_Name: P001
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,6 +160,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitId: U001
+  unitName: 
+  level: 1
   HP: 100
   initHP: 100
   EP: 100
@@ -172,8 +174,10 @@ MonoBehaviour:
   ADF: 10
   SPD: 30
   DEX: 10
-  AGL: 10
   RNG: 0
+  CRT: 10
+  roleType: 0
+  EXP: 100
   dead: 0
 --- !u!136 &136796004948421594
 CapsuleCollider:

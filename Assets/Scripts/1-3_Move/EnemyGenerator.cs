@@ -38,11 +38,9 @@ public class EnemyGenerator : MonoBehaviour {
 				player.GetComponentInChildren<PlayerSimpleMove>().enabled = false;
 				player.GetComponentInChildren<Animator>().SetInteger("Vertical", 0);
 				player.GetComponentInChildren<Animator>().SetInteger("Horizontal", 0);
-				string playerListStr = "U001,U001,U001";
+				string playerListStr = "P001,P001,P001";
 				PlayerPrefs.SetString("PlayerList", playerListStr);
 				LevelLoader._instance.LoadNextLevel();
-				count = 0;
-				step = Random.Range(minStep, maxStep);
 			}
 			else
 			{
