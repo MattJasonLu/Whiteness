@@ -16,14 +16,21 @@ public class SQLiteUtil : MonoBehaviour
         //创建名为sqlite4unity的数据库
         sql = new SQLiteHelper("data source=" + Application.dataPath + "/sqlite4unity.db");
 
+        /*
         //创建名为table1的数据表
-        sql.CreateTable("table2", new string[] { "ID", "Name", "Age", "Email" }, new string[] { "INTEGER", "TEXT", "INTEGER", "TEXT" });
+        sql.CreateTable("LEVELEXP_PLAYER", new string[] { "ID", "LEVEL", "EXP" }, new string[] { "INTEGER", "INTEGER", "INTEGER" });
 
         //插入两条数据
-        sql.InsertValues("table2", new string[] { "'1'", "'张三'", "'22'", "'Zhang3@163.com'" });
-        sql.InsertValues("table2", new string[] { "'2'", "'李四'", "'25'", "'Li4@163.com'" });
+        for (int i = 1; i <= 100; i++)
+        {
+            int y = Mathf.FloorToInt(Mathf.Pow(i - 1, 3)) + 60;
+            sql.InsertValues("LEVELEXP_PLAYER", new string[] { i + "", i + "", y + "" });
+        }
+        */
+        
+        //sql.InsertValues("table2", new string[] { "'2'", "'李四'", "'25'", "'Li4@163.com'" });
 
-        //更新数据，将Name="张三"的记录中的Name改为"Zhang3"
+        /*//更新数据，将Name="张三"的记录中的Name改为"Zhang3"
         sql.UpdateValues("table2", new string[] { "Name" }, new string[] { "'Zhang3'" }, "Name", "=", "'张三'");
 
         //插入3条数据
@@ -59,7 +66,7 @@ public class SQLiteUtil : MonoBehaviour
         }
 
         //自定义SQL,删除数据表中所有Name="王五"的记录
-        sql.ExecuteQuery("DELETE FROM table1 WHERE NAME='王五'");
+        sql.ExecuteQuery("DELETE FROM table1 WHERE NAME='王五'");*/
 
         //关闭数据库连接
         sql.CloseConnection();
