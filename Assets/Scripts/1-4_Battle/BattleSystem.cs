@@ -277,12 +277,12 @@ public class BattleSystem : MonoBehaviour {
 			if (i == 0)
 			{
 				pos = playerUnitPos_2.position;
-				panel = rolePanel_1;
+				panel = rolePanel_2;
 			}
 			else if (i == 1)
 			{
 				pos = playerUnitPos_1.position;
-				panel = rolePanel_2;
+				panel = rolePanel_1;
 			}
 			else if (i == 2)
 			{
@@ -463,6 +463,7 @@ public class BattleSystem : MonoBehaviour {
 		ShowHint(currentActUnit, "发动攻击");
 		yield return new WaitForSeconds(1);
 		int receiveVal = currentActTargetUnitStatus.GetDamageValue(attackVal);
+		currentActTargetUnit.GetComponent<RoleUnit>().HP -= receiveVal;
 		ShowHint(currentActTargetUnit, receiveVal.ToString());
 		yield return new WaitForSeconds(0.5f);
 		// 使角色返回

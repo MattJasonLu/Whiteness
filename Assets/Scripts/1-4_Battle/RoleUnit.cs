@@ -63,11 +63,11 @@ public class RoleUnit : MonoBehaviour {
 		if (rolePanel != null)
 		{
 			hpText.text = HP.ToString();
-			epText.text = HP.ToString();
-			cpText.text = HP.ToString();
-			hpSlider.value = HP / initHP * 100;
-			epSlider.value = EP / initEP * 100;
-			cpSlider.value = CP / initCP * 100;
+			epText.text = EP.ToString();
+			cpText.text = CP.ToString();
+			hpSlider.value = HP;
+			epSlider.value = EP;
+			cpSlider.value = CP;
 		}
 	}
 
@@ -101,6 +101,12 @@ public class RoleUnit : MonoBehaviour {
 		hpSlider = this.rolePanel.transform.Find("HPSlider").GetComponent<Slider>();
 		epSlider = this.rolePanel.transform.Find("EPSlider").GetComponent<Slider>();
 		cpSlider = this.rolePanel.transform.Find("CPSlider").GetComponent<Slider>();
+		hpSlider.maxValue = initHP;
+		hpSlider.value = hpSlider.maxValue;
+		epSlider.maxValue = initEP;
+		epSlider.value = epSlider.maxValue;
+		cpSlider.maxValue = initCP;
+		cpSlider.value = cpSlider.maxValue;
 	}
 
 
@@ -120,8 +126,7 @@ public class RoleUnit : MonoBehaviour {
 	/// <returns>实际受到的伤害</returns>
 	public int GetDamageValue(int damage)
 	{
-		HP -= damage;
-		return damage;
+		return damage -= DEF;
 	}
 
 }

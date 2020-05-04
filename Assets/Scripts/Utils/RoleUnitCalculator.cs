@@ -22,6 +22,10 @@ public class RoleUnitCalculator : MonoBehaviour {
 	/// <returns></returns>
 	public RoleUnit GetRoleUnitByIdAndLevel(string id, int level)
 	{
+		if (sqliteUtil == null)
+		{
+			sqliteUtil = SQLiteUtil._instance;
+		}
 		RoleUnit role = sqliteUtil.GetRoleUnitById(id);
 		if (role.roleType == 0)
 		{
