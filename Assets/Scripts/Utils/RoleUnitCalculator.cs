@@ -4,16 +4,10 @@ using UnityEngine;
 
 public class RoleUnitCalculator : MonoBehaviour {
 
-	public static RoleUnitCalculator _instance;
-
 	SQLiteUtil sqliteUtil;
 	Dictionary<int, int> playerLevelExpDict;
 	Dictionary<int, int> enemyLevelExpDict;
 
-	void Awake()
-	{
-		_instance = this;
-	}
 
 	// Use this for initialization
 	void Start () {

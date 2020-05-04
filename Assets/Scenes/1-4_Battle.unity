@@ -2491,8 +2491,8 @@ GameObject:
   m_Component:
   - component: {fileID: 745000910}
   - component: {fileID: 745000909}
-  - component: {fileID: 745000911}
   - component: {fileID: 745000912}
+  - component: {fileID: 745000911}
   m_Layer: 0
   m_Name: BattleMangager
   m_TagString: Untagged
@@ -2529,6 +2529,7 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: 1556143306277054, guid: f5251539cf0993b4db84a1940f396ad8, type: 2}
   notice: {fileID: 53195884}
+  roleUnitCalculator: {fileID: 745000912}
 --- !u!4 &745000910
 Transform:
   m_ObjectHideFlags: 0

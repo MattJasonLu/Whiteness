@@ -17,13 +17,14 @@ public class SQLiteUtil : MonoBehaviour
     void Awake()
     {
         _instance = this;
+        //创建名为sqlite4unity的数据库
+        sql = new SQLiteHelper("data source=" + Application.dataPath + "/sqlite4unity.db");
+        Debug.Log("DB加载");
     }
 
     void Start()
     {
-        //创建名为sqlite4unity的数据库
-        sql = new SQLiteHelper("data source=" + Application.dataPath + "/sqlite4unity.db");
-
+        
         #region 表操作
         /*
         //创建名为table1的数据表

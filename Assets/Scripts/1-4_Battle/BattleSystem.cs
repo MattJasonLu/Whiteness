@@ -40,6 +40,8 @@ public class BattleSystem : MonoBehaviour {
 	public GameObject[] enemyPrefabs;
 	// 提示文字
 	public GameObject notice;
+	// 角色计算器
+	public RoleUnitCalculator roleUnitCalculator;
 
 	// 所有参战单元
 	private List<GameObject> battleUnits;
@@ -282,7 +284,7 @@ public class BattleSystem : MonoBehaviour {
 			GameObject role = Instantiate(prefab, pos, Quaternion.identity);
 			role.tag = "Player";
 			int level = 5; // 需设置为保存值 TODO
-			RoleUnit roleData = RoleUnitCalculator._instance.GetRoleUnitByIdAndLevel(role.GetComponent<RoleUnit>().unitId, level);
+			RoleUnit roleData = roleUnitCalculator.GetRoleUnitByIdAndLevel(role.GetComponent<RoleUnit>().unitId, level);
 			role.GetComponent<RoleUnit>().SetInitData(roleData);
 		}
 	}
@@ -318,7 +320,7 @@ public class BattleSystem : MonoBehaviour {
 			GameObject role = Instantiate(prefab, pos, Quaternion.identity);
 			role.tag = "Enemy";
 			int level = Random.Range(minEnemyLevel, maxEnemyLevel + 1);
-			RoleUnit roleData = RoleUnitCalculator._instance.GetRoleUnitByIdAndLevel(role.GetComponent<RoleUnit>().unitId, level);
+			RoleUnit roleData = roleUnitCalculator.GetRoleUnitByIdAndLevel(role.GetComponent<RoleUnit>().unitId, level);
 			role.GetComponent<RoleUnit>().SetInitData(roleData);
 		}
 	}
