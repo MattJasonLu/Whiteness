@@ -3953,6 +3953,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 49941150}
     m_Modifications:
+    - target: {fileID: 114840448316055234, guid: 3368bcf7d06af294ba7770a647967768,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224492044214140086, guid: 3368bcf7d06af294ba7770a647967768,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -4043,43 +4048,19 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 224716429547927604, guid: 3368bcf7d06af294ba7770a647967768,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0.52
-      objectReference: {fileID: 0}
-    - target: {fileID: 224716429547927604, guid: 3368bcf7d06af294ba7770a647967768,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224752614126934280, guid: 3368bcf7d06af294ba7770a647967768,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0.52
-      objectReference: {fileID: 0}
-    - target: {fileID: 224752614126934280, guid: 3368bcf7d06af294ba7770a647967768,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224842504251932508, guid: 3368bcf7d06af294ba7770a647967768,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0.52
-      objectReference: {fileID: 0}
-    - target: {fileID: 224842504251932508, guid: 3368bcf7d06af294ba7770a647967768,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1331841431511550, guid: 3368bcf7d06af294ba7770a647967768, type: 2}
       propertyPath: m_Name
       value: RolePanel_1
       objectReference: {fileID: 0}
-    - target: {fileID: 1331841431511550, guid: 3368bcf7d06af294ba7770a647967768, type: 2}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 114840448316055234, guid: 3368bcf7d06af294ba7770a647967768,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114840448316055234, guid: 3368bcf7d06af294ba7770a647967768,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3368bcf7d06af294ba7770a647967768, type: 2}

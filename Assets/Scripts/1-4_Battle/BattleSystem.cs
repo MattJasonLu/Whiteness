@@ -160,8 +160,8 @@ public class BattleSystem : MonoBehaviour {
 			}
 			else
 			{
-				//停止移动
-				currentActUnit.GetComponentInChildren<Animator>().SetInteger("Horizontal", 0);
+				//进入战斗状态
+				currentActUnit.GetComponentInChildren<Animator>().SetTrigger("Battle");
 				//关闭移动状态
 				isUnitRunningToBattle = false;
 			}
@@ -169,6 +169,7 @@ public class BattleSystem : MonoBehaviour {
 
 		if (isUnitRunningToTarget)
 		{
+			currentActUnit.GetComponentInChildren<Animator>().SetTrigger("Idle");
 			float distanceToTarget = Vector3.Distance(currentActUnitTargetPosition, currentActUnit.transform.position);           //到目标的距离，需要实时计算
             //避免靠近目标时抖动
 			if (distanceToTarget > 1)
