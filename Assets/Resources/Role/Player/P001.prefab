@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitId: P001
-  unitName: 
+  unitName: TEST
   level: 1
   HP: 100
   initHP: 100
@@ -179,6 +179,8 @@ MonoBehaviour:
   roleType: 0
   EXP: 100
   dead: 0
+  rolePanelPrefab: {fileID: 1331841431511550, guid: 3368bcf7d06af294ba7770a647967768,
+    type: 2}
 --- !u!136 &136796004948421594
 CapsuleCollider:
   m_ObjectHideFlags: 1

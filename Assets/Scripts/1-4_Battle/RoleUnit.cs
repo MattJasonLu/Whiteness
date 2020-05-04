@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoleUnit : MonoBehaviour {
 	// 单位编号
@@ -43,7 +44,33 @@ public class RoleUnit : MonoBehaviour {
 	public int EXP = 100;
 	// 是否死亡
 	public bool dead = false;
-	
+	// 角色显示面板预制体
+	public GameObject rolePanel;
+	private Text hpText;
+	private Text epText;
+	private Text cpText;
+	private Slider hpSlider;
+	private Slider epSlider;
+	private Slider cpSlider;
+
+	void Start()
+	{
+
+	}
+
+	void Update()
+	{
+		if (rolePanel != null)
+		{
+			hpText.text = HP.ToString();
+			epText.text = HP.ToString();
+			cpText.text = HP.ToString();
+			hpSlider.value = HP / initHP * 100;
+			epSlider.value = EP / initEP * 100;
+			cpSlider.value = CP / initCP * 100;
+		}
+	}
+
 	public void SetInitData(RoleUnit roleUnit)
 	{
 		unitName = roleUnit.unitName;
@@ -65,6 +92,17 @@ public class RoleUnit : MonoBehaviour {
 		EXP = roleUnit.EXP;
 	}
 
+	public void SetPanel(GameObject rolePanel)
+	{
+		this.rolePanel = rolePanel;
+		hpText = this.rolePanel.transform.Find("HPText").GetComponent<Text>();
+		epText = this.rolePanel.transform.Find("EPText").GetComponent<Text>();
+		cpText = this.rolePanel.transform.Find("CPText").GetComponent<Text>();
+		hpSlider = this.rolePanel.transform.Find("HPSlider").GetComponent<Slider>();
+		epSlider = this.rolePanel.transform.Find("EPSlider").GetComponent<Slider>();
+		cpSlider = this.rolePanel.transform.Find("CPSlider").GetComponent<Slider>();
+	}
+
 
 	/// <summary>
 	/// 获取攻击值
@@ -72,8 +110,7 @@ public class RoleUnit : MonoBehaviour {
 	/// <returns></returns>
 	public int GetAttackValue()
 	{
-		// TODO：需计算
-		return 10;
+		return STR;
 	}
 
 	/// <summary>
@@ -83,8 +120,8 @@ public class RoleUnit : MonoBehaviour {
 	/// <returns>实际受到的伤害</returns>
 	public int GetDamageValue(int damage)
 	{
-		// TODO：需计算
-		return 10;
+		HP -= damage;
+		return damage;
 	}
 
 }

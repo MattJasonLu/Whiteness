@@ -19,7 +19,6 @@ public class SQLiteUtil : MonoBehaviour
         _instance = this;
         //创建名为sqlite4unity的数据库
         sql = new SQLiteHelper("data source=" + Application.dataPath + "/sqlite4unity.db");
-        Debug.Log("DB加载");
     }
 
     void Start()

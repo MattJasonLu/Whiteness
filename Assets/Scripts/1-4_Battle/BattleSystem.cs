@@ -29,6 +29,10 @@ public class BattleSystem : MonoBehaviour {
 	public Transform enemyUnitPos_1;
 	public Transform enemyUnitPos_2;
 	public Transform enemyUnitPos_3;
+	// 角色信息面板
+	public GameObject rolePanel_1;
+	public GameObject rolePanel_2;
+	public GameObject rolePanel_3;
 	// 选项面板
 	public GameObject basicPanel;
 	// 伤害信息
@@ -269,23 +273,29 @@ public class BattleSystem : MonoBehaviour {
 			// 加载每一个对象
 			GameObject prefab = Resources.Load("Role/Player/" + playerArr[i]) as GameObject;
 			Vector3 pos = playerUnitPos_1.position;
+			GameObject panel = rolePanel_1;
 			if (i == 0)
 			{
 				pos = playerUnitPos_2.position;
+				panel = rolePanel_1;
 			}
 			else if (i == 1)
 			{
 				pos = playerUnitPos_1.position;
+				panel = rolePanel_2;
 			}
 			else if (i == 2)
 			{
 				pos = playerUnitPos_3.position;
+				panel = rolePanel_3;
 			}
 			GameObject role = Instantiate(prefab, pos, Quaternion.identity);
 			role.tag = "Player";
 			int level = 5; // 需设置为保存值 TODO
 			RoleUnit roleData = roleUnitCalculator.GetRoleUnitByIdAndLevel(role.GetComponent<RoleUnit>().unitId, level);
 			role.GetComponent<RoleUnit>().SetInitData(roleData);
+			panel.SetActive(true);
+			role.GetComponent<RoleUnit>().SetPanel(panel);
 		}
 	}
 
