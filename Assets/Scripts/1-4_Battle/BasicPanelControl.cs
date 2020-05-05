@@ -10,6 +10,7 @@ public class BasicPanelControl : MonoBehaviour {
 	public GameObject skillPanel;
 	public GameObject comboPanel;
 	public GameObject itemPanel;
+	public GameObject attackAdditionPanel;
 
 	void Awake()
 	{
@@ -18,12 +19,15 @@ public class BasicPanelControl : MonoBehaviour {
 		skillPanel.SetActive(false);
 		comboPanel.SetActive(false);
 		itemPanel.SetActive(false);
+		attackAdditionPanel.SetActive(false);
 	}
 
 	// 普通攻击
 	public void CommonAttack()
 	{
-		BattleSystem._instance.OnAttack();
+		attackAdditionPanel.SetActive(true);
+		gameObject.SetActive(false);
+		//BattleSystem._instance.OnAttack();
 	}
 
 	// 显示魔法面板

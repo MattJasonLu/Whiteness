@@ -38,6 +38,8 @@ public class RoleUnit : MonoBehaviour {
 	public int RNG = 0;
 	// 暴击
 	public int CRT = 10;
+	// 命中率
+	public int HIT = 90;
 	// 角色类型，0为玩家，1为敌人
 	public int roleType = 0;
 	// 当前经验值
@@ -89,7 +91,9 @@ public class RoleUnit : MonoBehaviour {
 		DEX = roleUnit.DEX;
 		RNG = roleUnit.RNG;
 		CRT = roleUnit.CRT;
+		HIT = roleUnit.HIT;
 		EXP = roleUnit.EXP;
+		roleType = roleUnit.roleType;
 	}
 
 	public void SetPanel(GameObject rolePanel)

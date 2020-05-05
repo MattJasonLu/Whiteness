@@ -35,6 +35,7 @@ public class BattleSystem : MonoBehaviour {
 	public GameObject rolePanel_3;
 	// 选项面板
 	public GameObject basicPanel;
+	public GameObject attackAdditionPanel;
 	// 伤害信息
 	public GameObject hint;
 	// UI部分
@@ -97,12 +98,19 @@ public class BattleSystem : MonoBehaviour {
 	{
 		if (isWaitForPlayerToChooseSkill)
 		{
-			basicPanel.SetActive(true);
+			if (!basicPanel.activeSelf && !attackAdditionPanel.activeSelf)
+			{
+				basicPanel.SetActive(true);
+			}
 		}
 
 		if (isWaitForPlayerToChooseTarget)
 		{
-			basicPanel.SetActive(false);
+			if (basicPanel.activeSelf || attackAdditionPanel.activeSelf)
+			{
+				basicPanel.SetActive(false);
+				attackAdditionPanel.SetActive(false);
+			}
 			targetChooseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(targetChooseRay, out targetHit))
 			{

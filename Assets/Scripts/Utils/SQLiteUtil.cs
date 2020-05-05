@@ -117,7 +117,7 @@ public class SQLiteUtil : MonoBehaviour
     {
         RoleUnit roleUnit = new RoleUnit();
         SqliteDataReader reader = sql.ReadTable("ROLEDEF", new string[] { "NAME", "HP", "EP", "CP", "STR", 
-            "DEF", "ATS", "ADF", "SPD", "DEX", "RNG", "CRT", "ROLETYPE" }, new string[] { "ID" }, 
+            "DEF", "ATS", "ADF", "SPD", "DEX", "RNG", "CRT", "HIT", "ROLETYPE" }, new string[] { "ID" }, 
             new string[] { "=" }, new string[] { "'" + id + "'" });
         while (reader.Read())
         {
@@ -133,6 +133,7 @@ public class SQLiteUtil : MonoBehaviour
             roleUnit.DEX = reader.GetInt32(reader.GetOrdinal("DEX"));
             roleUnit.RNG = reader.GetInt32(reader.GetOrdinal("RNG"));
             roleUnit.CRT = reader.GetInt32(reader.GetOrdinal("CRT"));
+            roleUnit.HIT = reader.GetInt32(reader.GetOrdinal("HIT"));
             roleUnit.roleType = reader.GetInt32(reader.GetOrdinal("ROLETYPE"));
             break;
         }
